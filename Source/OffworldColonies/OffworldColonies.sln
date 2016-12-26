@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PQSModLoader", "PQSModLoader\PQSModLoader.csproj", "{032170AA-5114-437C-A94F-7559BAB88E2F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModUtils", "ModUtils\ModUtils.csproj", "{E002C51B-41BA-4459-BDF3-35E97586380D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OffworldColonies", "OffworldColonies\OffworldColonies.csproj", "{32BA14DC-56B9-4CA6-81DC-258F588F7DDC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{032170AA-5114-437C-A94F-7559BAB88E2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{032170AA-5114-437C-A94F-7559BAB88E2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{032170AA-5114-437C-A94F-7559BAB88E2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{032170AA-5114-437C-A94F-7559BAB88E2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E002C51B-41BA-4459-BDF3-35E97586380D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E002C51B-41BA-4459-BDF3-35E97586380D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E002C51B-41BA-4459-BDF3-35E97586380D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E002C51B-41BA-4459-BDF3-35E97586380D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32BA14DC-56B9-4CA6-81DC-258F588F7DDC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32BA14DC-56B9-4CA6-81DC-258F588F7DDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32BA14DC-56B9-4CA6-81DC-258F588F7DDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32BA14DC-56B9-4CA6-81DC-258F588F7DDC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

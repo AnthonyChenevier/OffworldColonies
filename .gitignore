@@ -1,0 +1,9 @@
+*.DotSettings
+*.user
+*.mdb
+Source/OffworldColonies/ModUtils/obj/
+Source/OffworldColonies/ModUtils/bin/
+Source/OffworldColonies/PQSModLoader/obj/
+Source/OffworldColonies/PQSModLoader/bin/
+Source/OffworldColonies/OffworldColonies/obj/
+Source/OffworldColonies/OffworldColonies/bin/
