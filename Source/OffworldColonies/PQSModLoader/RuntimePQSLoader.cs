@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using ModUtils;
+using ModUtilities;
 using PQSModLoader.Factories;
 using PQSModLoader.TypeDefinitions;
 using UnityEngine;

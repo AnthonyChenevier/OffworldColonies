@@ -1,0 +1,14 @@
+E:\Code\KSPMod\Repositories\OffworldColonies\Source\OffworldColonies\ModUtilities\bin\Debug\ModUtilities.dll
+E:\Code\KSPMod\Repositories\OffworldColonies\Source\OffworldColonies\ModUtilities\bin\Debug\ModUtilities.pdb
+E:\Code\KSPMod\Repositories\OffworldColonies\Source\OffworldColonies\ModUtilities\bin\Debug\Assembly-CSharp-firstpass.dll
+E:\Code\KSPMod\Repositories\OffworldColonies\Source\OffworldColonies\ModUtilities\bin\Debug\Assembly-CSharp.dll
+E:\Code\KSPMod\Repositories\OffworldColonies\Source\OffworldColonies\ModUtilities\bin\Debug\UnityEngine.dll
+E:\Code\KSPMod\Repositories\OffworldColonies\Source\OffworldColonies\ModUtilities\bin\Debug\UnityEngine.UI.dll
+E:\Code\KSPMod\Repositories\OffworldColonies\Source\OffworldColonies\ModUtilities\bin\Debug\TrackIRUnity.dll
+E:\Code\KSPMod\Repositories\OffworldColonies\Source\OffworldColonies\ModUtilities\bin\Debug\KSPAssets.dll
+E:\Code\KSPMod\Repositories\OffworldColonies\Source\OffworldColonies\ModUtilities\bin\Debug\Mono.Cecil.dll
+E:\Code\KSPMod\Repositories\OffworldColonies\Source\OffworldColonies\ModUtilities\bin\Debug\TDx.TDxInput.dll
+E:\Code\KSPMod\Repositories\OffworldColonies\Source\OffworldColonies\ModUtilities\bin\Debug\Mono.Security.dll
+E:\Code\KSPMod\Repositories\OffworldColonies\Source\OffworldColonies\ModUtilities\bin\Debug\UnityEngine.xml
+E:\Code\KSPMod\Repositories\OffworldColonies\Source\OffworldColonies\ModUtilities\obj\Debug\ModUtilities.dll
+E:\Code\KSPMod\Repositories\OffworldColonies\Source\OffworldColonies\ModUtilities\obj\Debug\ModUtilities.pdb

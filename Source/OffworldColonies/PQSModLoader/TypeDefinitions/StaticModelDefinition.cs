@@ -2,13 +2,17 @@
 
 namespace PQSModLoader.TypeDefinitions
 {
-    public class StaticModelDefinition: IConfigNode
+    public class StaticModelDefinition
     {
         public string ModelName { get; set; }
-        public string ModelPath { get; set; }
-        public Vector3 LocalPosition { get; set; } = Vector3.zero;
-        public Vector3 LocalRotationEuler { get; set; } = Vector3.zero;
-        public float LocalScale { get; set; } = 1;
+        public string ModelPath { get; private set; }
+        public Vector3 LocalPosition { get; private set; } = Vector3.zero;
+        public Vector3 LocalRotationEuler { get; private set; } = Vector3.zero;
+        public float LocalScale { get; private set; } = 1;
+
+        public StaticModelDefinition(ConfigNode node) {
+            Load(node);
+        }
 
         public void Load(ConfigNode node)
         {
@@ -23,11 +27,6 @@ namespace PQSModLoader.TypeDefinitions
 
             if (node.HasValue("LocalScale"))
                 LocalScale = float.Parse(node.GetValue("LocalScale"));
-        }
-
-        public void Save(ConfigNode node)
-        {
-            //nothing
         }
     }
 }

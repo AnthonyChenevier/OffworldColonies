@@ -1,6 +1,7 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-namespace ModUtils
+namespace ModUtilities
 {
     public static class DrawTools
     {
@@ -174,89 +175,53 @@ namespace ModUtils
 
             GLEnd();
         }
-        public static void DrawBounds(Bounds bounds, Color color)
-        {
-            Vector3 center = bounds.center;
 
-            float x = bounds.extents.x;
-            float y = bounds.extents.y;
-            float z = bounds.extents.z;
+        public static void DrawBounds(Transform boundTransform, Bounds bounds, Color color) {
+            List<Vector3> corners = bounds.Corners();
+            for (int i = 0; i < corners.Count; i++) 
+                corners[i] = boundTransform.TransformPoint(corners[i]);
+            DrawBox(corners, color);
+        }
 
-            Vector3 topa = center + new Vector3(x, y, z);
-            Vector3 topb = center + new Vector3(x, y, -z);
-            Vector3 topc = center + new Vector3(-x, y, z);
-            Vector3 topd = center + new Vector3(-x, y, -z);
-
-            Vector3 bota = center + new Vector3(x, -y, z);
-            Vector3 botb = center + new Vector3(x, -y, -z);
-            Vector3 botc = center + new Vector3(-x, -y, z);
-            Vector3 botd = center + new Vector3(-x, -y, -z);
-
+        public static void DrawBox(List<Vector3> corners, Color color) {
             GLStart();
-            GL.Color(color);
-
             // Top
-            DrawLine(topa, topc, color);
-            DrawLine(topa, topb, color);
-            DrawLine(topc, topd, color);
-            DrawLine(topb, topd, color);
-
+            DrawLine(corners[0], corners[2], color);
+            DrawLine(corners[0], corners[1], color);
+            DrawLine(corners[2], corners[3], color);
+            DrawLine(corners[1], corners[3], color);
             // Sides
-            DrawLine(topa, bota, color);
-            DrawLine(topb, botb, color);
-            DrawLine(topc, botc, color);
-            DrawLine(topd, botd, color);
-
+            DrawLine(corners[0], corners[4], color);
+            DrawLine(corners[1], corners[5], color);
+            DrawLine(corners[2], corners[6], color);
+            DrawLine(corners[3], corners[7], color);
             // Bottom
-            DrawLine(bota, botc, color);
-            DrawLine(bota, botb, color);
-            DrawLine(botc, botd, color);
-            DrawLine(botd, botb, color);
+            DrawLine(corners[4], corners[6], color);
+            DrawLine(corners[4], corners[5], color);
+            DrawLine(corners[6], corners[7], color);
+            DrawLine(corners[7], corners[5], color);
 
             GLEnd();
         }
+
         /// <summary>
         /// Draws a GL primitive cube on the given transform.
         /// </summary>
         /// <param name="transform">The transform the cube is relative to</param>
         /// <param name="size">size of the cube</param>
         /// <param name="color">cube colour</param>
-        /// <param name="center">cube centre offset in local space (default is (0,0,0))</param>
-        public static void DrawLocalCube(Transform transform, Vector3 size, Color color, Vector3 center = default(Vector3)) {
-            Vector3 topa = transform.TransformPoint(center + new Vector3(-size.x, size.y, -size.z) * 0.5f);
-            Vector3 topb = transform.TransformPoint(center + new Vector3(size.x, size.y, -size.z) * 0.5f);
-
-            Vector3 topc = transform.TransformPoint(center + new Vector3(size.x, size.y, size.z) * 0.5f);
-            Vector3 topd = transform.TransformPoint(center + new Vector3(-size.x, size.y, size.z) * 0.5f);
-
-            Vector3 bota = transform.TransformPoint(center + new Vector3(-size.x, -size.y, -size.z) * 0.5f);
-            Vector3 botb = transform.TransformPoint(center + new Vector3(size.x, -size.y, -size.z) * 0.5f);
-
-            Vector3 botc = transform.TransformPoint(center + new Vector3(size.x, -size.y, size.z) * 0.5f);
-            Vector3 botd = transform.TransformPoint(center + new Vector3(-size.x, -size.y, size.z) * 0.5f);
-
-            GLStart();
-            GL.Color(color);
-
-            //top
-            DrawLine(topa, topb, color);
-            DrawLine(topb, topc, color);
-            DrawLine(topc, topd, color);
-            DrawLine(topd, topa, color);
-
-            //Sides
-            DrawLine(topa, bota, color);
-            DrawLine(topb, botb, color);
-            DrawLine(topc, botc, color);
-            DrawLine(topd, botd, color);
-
-            //Bottom
-            DrawLine(bota, botb, color);
-            DrawLine(botb, botc, color);
-            DrawLine(botc, botd, color);
-            DrawLine(botd, bota, color);
-
-            GLEnd();
+        /// <param name="offset">cube centre offset in local space (default is (0,0,0))</param>
+        public static void DrawLocalBox(Transform transform, Vector3 size, Color color, Vector3 offset = default(Vector3)) {
+            DrawBox(new List<Vector3> {
+                transform.TransformPoint(offset + new Vector3(-size.x, size.y, -size.z)*0.5f),
+                transform.TransformPoint(offset + new Vector3(size.x, size.y, -size.z)*0.5f),
+                transform.TransformPoint(offset + new Vector3(size.x, size.y, size.z)*0.5f),
+                transform.TransformPoint(offset + new Vector3(-size.x, size.y, size.z)*0.5f),
+                transform.TransformPoint(offset + new Vector3(-size.x, -size.y, -size.z)*0.5f),
+                transform.TransformPoint(offset + new Vector3(size.x, -size.y, -size.z)*0.5f),
+                transform.TransformPoint(offset + new Vector3(size.x, -size.y, size.z)*0.5f),
+                transform.TransformPoint(offset + new Vector3(-size.x, -size.y, size.z)*0.5f)
+            }, color);
         }
 
         public static void DrawCapsule(Vector3 start, Vector3 end, Color color, float radius = 1)

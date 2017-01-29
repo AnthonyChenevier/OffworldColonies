@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace PQSModLoader.TypeDefinitions
 {
@@ -7,27 +6,22 @@ namespace PQSModLoader.TypeDefinitions
     /// Simple struct to hold LODObject definitions (from config or hard-coded).
     /// TODO: add local position, rotation and scale
     /// </summary>
-    public class LODDefinition:IConfigNode
+    public class LODDefinition
     {
-        public List<StaticModelDefinition> Models { get; set; }
-        public float VisibleRange { get; set; }
+        public List<StaticModelDefinition> Models { get; private set; }
+        public float VisibleRange { get; private set; }
 
-        public void Save(ConfigNode node) {
-            //nothing for now
+        public LODDefinition(ConfigNode node) {
+            Load(node);
         }
 
         public void Load(ConfigNode node) {
-            this.VisibleRange = float.Parse(node.GetValue("VisibleRange"));
+            VisibleRange = float.Parse(node.GetValue("VisibleRange"));
+
+            Models = new List<StaticModelDefinition>();
             ConfigNode[] models = node.GetNodes("MODEL");
-
-            this.Models = new List<StaticModelDefinition>();
-
             foreach (ConfigNode modelNode in models)
-            {
-                StaticModelDefinition modDef = new StaticModelDefinition();
-                modDef.Load(modelNode);
-                this.Models.Add(modDef);
-            }
+                Models.Add(new StaticModelDefinition(modelNode));
         }
     }
 }

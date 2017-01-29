@@ -1,47 +1,110 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using ModUtils;
+using ModUtilities;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace OffworldColoniesPlugin.Debug {
+namespace OffworldColonies.Debug {
     /// <summary>
-    /// A toolkit full of 
+    ///     A toolkit full of
     /// </summary>
     public class DebugTools {
+        #region Visualisation Helpers
+
+        //remember our defined helpers so we don't create spam
+        private static Dictionary<string, VisualHelper> _bHelpers;
+
+        public static void CreateHelperCubeAt(string helperId, Transform parent, Vector3 size, Color color, Vector3 posOffset) {
+            if (_bHelpers == null)
+                _bHelpers = new Dictionary<string, VisualHelper>();
+            if (!_bHelpers.ContainsKey(helperId) ||
+                (_bHelpers.ContainsKey(helperId) && (_bHelpers[helperId] == null)))
+                _bHelpers[helperId] = VisualHelper.CreateHelper(parent, size, color, posOffset);
+            if (_bHelpers.ContainsKey(helperId))
+                _bHelpers[helperId].Change(parent, size, color, posOffset);
+        }
+
+        public static void CreateHelperBoundsAt(string helperId, Transform parent, Bounds bounds, Color color) {
+            if (_bHelpers == null)
+                _bHelpers = new Dictionary<string, VisualHelper>();
+            if (!_bHelpers.ContainsKey(helperId) ||
+                (_bHelpers.ContainsKey(helperId) && (_bHelpers[helperId] == null)))
+                _bHelpers[helperId] = VisualHelper.CreateHelper(parent, bounds, color);
+            if (_bHelpers.ContainsKey(helperId))
+                _bHelpers[helperId].Change(parent, bounds, color);
+        }
+
+        public static void CreateHelperSphereAt(string helperId, Transform parent, float radius, Color color, Vector3 posOffset) {
+            if (_bHelpers == null)
+                _bHelpers = new Dictionary<string, VisualHelper>();
+
+            if (!_bHelpers.ContainsKey(helperId) ||
+                (_bHelpers.ContainsKey(helperId) && (_bHelpers[helperId] == null)))
+                _bHelpers[helperId] = VisualHelper.CreateHelper(parent, radius, color, posOffset);
+            if (_bHelpers.ContainsKey(helperId))
+                _bHelpers[helperId].Change(parent, radius, color, posOffset);
+        }
+
+        #endregion
+
+        public static void DumpLayerMatrix() {
+            ModLogger.Log("Getting Collision Matrix");
+            string colTitles = ",";
+            string[] matrix = new string[32];
+            //32 Layers in Unity. Go through them all and get their collidability with every other layer
+            for (int rowLayerID = 0; rowLayerID < 32; rowLayerID++) {
+                string rowLayerName = LayerMask.LayerToName(rowLayerID);
+                matrix[rowLayerID] = $"{rowLayerName},";
+                for (int colLayerID = 31; colLayerID >= rowLayerID; colLayerID--) {
+                    if (rowLayerID == 0) {
+                        string colLayerName = LayerMask.LayerToName(colLayerID);
+                        colTitles += $"{colLayerName},";
+                    }
+
+                    matrix[rowLayerID] += Physics.GetIgnoreLayerCollision(rowLayerID, colLayerID)? "O,": "X,";
+                }
+            }
+            ModLogger.Log(colTitles);
+            foreach (string row in matrix)
+                ModLogger.Log(row);
+            ModLogger.Log("Collision matrix dump complete");
+        }
+
 
         /// <summary>
-        /// Dumps the given GameObject data, including name, active status, attached components and optionally all child object as well
+        ///     Dumps the given GameObject data, including name, active status, attached components and optionally all child object
+        ///     as well
         /// </summary>
         /// <param name="go"></param>
         /// <param name="childDepth">Number of levels to recurse child GameObject dumping. -1 = infinite</param>
         /// <param name="depth"></param>
         public static void DumpGameObjectDetails(GameObject go, int childDepth, string depth = "") {
-            ModLogger.Log($"{depth}GameObject(\"{go.name}\")({go.activeSelf}) {{");
+            ModLogger.Log($"{depth}GameObject(\"{go.name}\")({go.activeSelf}) layer:{LayerMask.LayerToName(go.layer)} {{");
             Component[] components = go.GetComponents<Component>();
-            foreach (Component component in components)
-            {
+            foreach (Component component in components) {
                 Type componentType = component.GetType();
                 string componentHeader = $"{depth}-Component(\"{component.name}\"):{componentType}";
 
                 //ADD ANY COMPONENT TYPES YOU WANT TO HANDLE SPECIALLY HERE
-                if (componentType == typeof(PQS) || componentType == typeof(PQSCity2))
+                if ((componentType == typeof(PQS)) || (componentType == typeof(PQSCity2)))
                     componentHeader += " Data {";
 
                 ModLogger.Log(componentHeader);
 
                 //PUT THE COMPONENT CHECKS HERE IN AN IF STATEMENT
                 if (componentType == typeof(PQS)) {
-                    PQS pqs = (PQS)component;
+                    PQS pqs = (PQS) component;
                     ModLogger.Log($"{depth}--\"PQS.surfaceMaterial = {pqs.surfaceMaterial}\"");
                 }
                 if (componentType == typeof(PQSCity2)) {
-                    PQSCity2 pqsCity2 = (PQSCity2)component;
-                    ModLogger.Log($"{depth}--\"PQSCity2.enabled ? {pqsCity2.enabled}. isActiveAndEnabled {pqsCity2.isActiveAndEnabled}. modEnabled {pqsCity2.modEnabled}.\"");
+                    PQSCity2 pqsCity2 = (PQSCity2) component;
+                    ModLogger.Log(
+                        $"{depth}--\"PQSCity2.enabled ? {pqsCity2.enabled}. isActiveAndEnabled {pqsCity2.isActiveAndEnabled}. modEnabled {pqsCity2.modEnabled}.\"");
                 }
 
                 //ADD ANY COMPONENT TYPES YOU WANT TO HANDLE SPECIALLY HERE (AGAIN)
-                if (componentType == typeof(PQS) || componentType == typeof(PQSCity2))
+                if ((componentType == typeof(PQS)) || (componentType == typeof(PQSCity2)))
                     ModLogger.Log($"{depth}-}}");
             }
 
@@ -51,19 +114,16 @@ namespace OffworldColoniesPlugin.Debug {
                 return;
             }
 
-            if (childDepth > 0 || childDepth == -1)
-            {
+            if ((childDepth > 0) || (childDepth == -1)) {
                 ModLogger.Log($"{depth}-Children {{");
                 Transform goTransform = go.transform;
-                foreach (Transform tr in goTransform)
-                {
-                    int recursionsRemaining = (childDepth > 0) ? childDepth - 1 : childDepth;
+                foreach (Transform tr in goTransform) {
+                    int recursionsRemaining = childDepth > 0 ? childDepth - 1 : childDepth;
                     DumpGameObjectDetails(tr.gameObject, recursionsRemaining, depth + "--");
                 }
                 ModLogger.Log($"{depth}-}}");
             }
-            else
-            {
+            else {
                 ModLogger.Log($"{depth}-Children {{");
                 Transform goTransform = go.transform;
                 foreach (Transform tr in goTransform)
@@ -74,16 +134,13 @@ namespace OffworldColoniesPlugin.Debug {
         }
 
 
-        public static void DumpHeirarchy()
-        {
+        public static void DumpHeirarchy() {
             string oldTitle = ModLogger.Title;
             ModLogger.Title = oldTitle + "(SCENE DUMP)";
             ModLogger.Log("Dumping Scene Heirarchy");
             GameObject[] rootGameObjects = SceneManager.GetActiveScene().GetRootGameObjects();
             foreach (GameObject rootGameObject in rootGameObjects)
-            {
                 DumpGameObjectDetails(rootGameObject, -1);
-            }
             ModLogger.Log("Scene Dump Complete");
             ModLogger.Title = oldTitle;
         }
@@ -93,11 +150,13 @@ namespace OffworldColoniesPlugin.Debug {
             RaycastHit hit;
             //Camera cam = FlightCamera.fetch.mainCamera; // Camera to use for raycasting
             //Ray ray = cam.ScreenPointToRay(pos);
-            Physics.Raycast(vessel.transform.position, -vessel.upAxis, out hit, 10000.0f, LayerMask.GetMask("Local Scenery"));
+            Physics.Raycast(vessel.transform.position, -vessel.upAxis, out hit, 10000.0f,
+                LayerMask.GetMask("Local Scenery"));
             if (hit.collider) {
                 GameObject hitObject = hit.collider.gameObject;
                 DumpGameObjectDetails(hitObject, 0);
-                ModLogger.Log($"{hitObject.name} hit. Layer = {LayerMask.LayerToName(hitObject.layer)}({hitObject.layer})");
+                ModLogger.Log(
+                    $"{hitObject.name} hit. Layer = {LayerMask.LayerToName(hitObject.layer)}({hitObject.layer})");
 
                 Renderer renderer = hitObject.GetComponent<PQ>().meshRenderer;
                 if (renderer == null)
@@ -111,9 +170,9 @@ namespace OffworldColoniesPlugin.Debug {
         }
 
         private static Color GetColorFromMaterialAt(Material mat, Vector2 coord) {
-            Color c;
             // Create a temporary RenderTexture of the same size as the unreadable texture
-            RenderTexture tmp = RenderTexture.GetTemporary(mat.mainTexture.width, mat.mainTexture.height, 0, RenderTextureFormat.Default,
+            RenderTexture tmp = RenderTexture.GetTemporary(mat.mainTexture.width, mat.mainTexture.height, 0,
+                RenderTextureFormat.Default,
                 RenderTextureReadWrite.Linear);
 
             // Blit the pixels on texture to the RenderTexture
@@ -133,13 +192,11 @@ namespace OffworldColoniesPlugin.Debug {
             RenderTexture.ReleaseTemporary(tmp);
             File.WriteAllBytes(Application.dataPath + "/../SavedScreen.png", myTexture2D.EncodeToPNG());
             // "myTexture2D" now has the same pixels from "texture" and it's readable.
-            c = myTexture2D.GetPixelBilinear(coord.x, coord.y); // Get color from texture
 
-            return c;
+            return myTexture2D.GetPixelBilinear(coord.x, coord.y);
         }
 
-        public static void TestMisc()
-        {
+        public static void TestMisc() {
             //Vessel activeVessel = FlightGlobals.ActiveVessel;
             //CelestialBody cBody = activeVessel.mainBody;
 
@@ -179,7 +236,7 @@ namespace OffworldColoniesPlugin.Debug {
             //OCLogger.Log($"[C2] World Position: {bCoords2.WorldPosition} ");
             //OCLogger.Log($"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 
-            //Bounds vBounds = VesselUtils.GetVesselBounds(activeVessel);
+            //Bounds vBounds = activeVessel.GetVesselBounds();
             //OCLogger.Log($"[B] Vessel Bounds Centre: {vBounds.center} Min: {vBounds.min} Max: {vBounds.max} Size: {vBounds.size}");
             //OCLogger.Log($"++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
             //OCLogger.Log($"Kerbin world position: {cBody.position}");
@@ -200,14 +257,14 @@ namespace OffworldColoniesPlugin.Debug {
             //    //    Logger.Instance.Log($"--{pqsSurfaceObject.GetType()} is not of type PQSCity or PQSCity2");
             //}
 
-            //VesselUtils.CreateHelperBoundsAt("vesselBounds", activeVessel.transform, vBounds, XKCDColors.AlgaeGreen);
-            //VesselUtils.CreateHelperSphereAt("VesselExclusion", vBounds.center, new Color(255,0,0,10), vBounds.size.magnitude, activeVessel.transform);
+            //TypeUtilities.CreateHelperBoundsAt("vesselBounds", activeVessel.transform, vBounds, XKCDColors.AlgaeGreen);
+            //TypeUtilities.CreateHelperSphereAt("VesselExclusion", vBounds.center, new Color(255,0,0,10), vBounds.size.magnitude, activeVessel.transform);
 
-            //VesselUtils.CreateHelperSphereAt("PartUp",
+            //TypeUtilities.CreateHelperSphereAt("PartUp",
             //    transform.position + (transform.up*4), XKCDColors.GrassyGreen, .5f, transform);
-            //VesselUtils.CreateHelperSphereAt("PartForward",
+            //TypeUtilities.CreateHelperSphereAt("PartForward",
             //    transform.position + (transform.forward*4), XKCDColors.GreenApple, .5f, transform);
-            //VesselUtils.CreateHelperSphereAt("PartRight",
+            //TypeUtilities.CreateHelperSphereAt("PartRight",
             //    transform.position + (transform.right*4), XKCDColors.GreenBlue, .5f, transform);
 
 
@@ -217,6 +274,13 @@ namespace OffworldColoniesPlugin.Debug {
             //activeVessel.mainBody.GetSurfaceNVector;
             //activeVessel.mainBody.Radius;
             //create a base at the correct position
+        }
+
+        public static void ColliderDump(Vector3 position, float radius) {
+            Collider[] colliders = Physics.OverlapSphere(position, radius);
+            foreach (Collider collider in colliders) {
+                DumpGameObjectDetails(collider.gameObject, -1);
+            }
         }
     }
 }

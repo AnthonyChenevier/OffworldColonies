@@ -1,16 +1,13 @@
 using System.Collections.Generic;
-using ModUtils;
+using ModUtilities;
 using PQSModLoader.TypeDefinitions;
 using UnityEngine;
 
 namespace PQSModLoader.Factories
 {
     public class LODFactory {
-        public static PQSCity2.LodObject Create(ConfigNode fromNode, Transform parent)
-        {
-            LODDefinition lodDef = new LODDefinition();
-            lodDef.Load(fromNode);
-            return Create(lodDef, parent);
+        public static PQSCity2.LodObject Create(ConfigNode fromNode, Transform parent) {
+            return Create(new LODDefinition(fromNode), parent);
         }
 
         public static PQSCity2.LodObject Create(LODDefinition lodDefinition, Transform parent) {

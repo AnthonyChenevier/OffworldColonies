@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace ModUtils {
+namespace ModUtilities {
     /// <summary>
     /// Static Logger class for to log things with. Now includes pretty colouring options!
     /// </summary>
@@ -27,6 +27,14 @@ namespace ModUtils {
 
         public static void Log(string message, Color color) {
             Log($"<color=#{ColorUtility.ToHtmlStringRGB(color)}>{message}</color>");
+        }
+
+        public static void LogWarning(string message) {
+            Debug.LogWarning($"[{Title}]: {message}");
+        }
+
+        public static void LogError(string message) {
+            Debug.LogError($"[{Title}]: {message}");
         }
     }
 }

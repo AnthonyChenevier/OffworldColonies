@@ -7,27 +7,22 @@ namespace PQSModLoader.TypeDefinitions
     /// but only contains a List of LODDefine. For use when adding a new
     /// model (including all LODs for that model) to an existing PQSCity2.
     /// </summary>
-    public class MultiLODModelDefinition: IConfigNode
+    public class MultiLODModelDefinition
     {
-        public List<LODDefinition> LODDefines { get; set; }
+        public List<LODDefinition> LODDefines { get; private set; }
 
-        public void Save(ConfigNode node)
-        {
-            //no need for this
+        public MultiLODModelDefinition(ConfigNode node) {
+            Load(node);
         }
 
         public void Load(ConfigNode node)
         {
-            this.LODDefines = new List<LODDefinition>();
+            LODDefines = new List<LODDefinition>();
             ConfigNode[] lodNodes = node.GetNodes("LOD");
             foreach (ConfigNode lodNode in lodNodes)
-            {
-                LODDefinition def = new LODDefinition();
-                def.Load(lodNode);
-                this.LODDefines.Add(def);
-            }
+                LODDefines.Add(new LODDefinition(lodNode));
 
-            this.LODDefines.Sort((p, q) => p.VisibleRange.CompareTo(q.VisibleRange));
+            LODDefines.Sort((p, q) => p.VisibleRange.CompareTo(q.VisibleRange));
         }
     }
 }

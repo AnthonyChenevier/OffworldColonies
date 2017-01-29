@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{032170AA-5114-437C-A94F-7559BAB88E2F}</ProjectGuid>
+    <ProjectGuid>{A927EBBB-6A0C-4AE3-B316-24C20088AB9D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PQSModLoader</RootNamespace>
-    <AssemblyName>PQSModLoader</AssemblyName>
+    <RootNamespace>UIBridge</RootNamespace>
+    <AssemblyName>UIBridge</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -31,12 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\..\..\KSP Installs\KSP_Test\KSP_x64_Data\Managed\Assembly-CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>..\..\..\..\..\KSP Installs\KSP_Test\KSP_x64_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,30 +40,22 @@
     <Reference Include="UnityEngine">
       <HintPath>..\..\..\..\..\KSP Installs\KSP_Test\KSP_x64_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>..\..\..\..\..\KSP Installs\KSP_Test\KSP_x64_Data\Managed\UnityEngine.UI.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Factories\LODFactory.cs" />
-    <Compile Include="Factories\PQSCity2Factory.cs" />
-    <Compile Include="Factories\StaticModelFactory.cs" />
-    <Compile Include="RuntimePQSCity2.cs" />
-    <Compile Include="RuntimePQSLoader.cs" />
-    <Compile Include="RuntimePQSModInjector.cs" />
+    <Compile Include="UIElement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TypeDefinitions\LODDefinition.cs" />
-    <Compile Include="TypeDefinitions\MultiLODModelDefinition.cs" />
-    <Compile Include="TypeDefinitions\PQSCity2Definition.cs" />
-    <Compile Include="TypeDefinitions\StaticModelDefinition.cs" />
-    <Compile Include="TypeDefinitions\BodySurfacePosition.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ModUtilities\ModUtilities.csproj">
-      <Project>{e002c51b-41ba-4459-bdf3-35e97586380d}</Project>
-      <Name>ModUtilities</Name>
-    </ProjectReference>
+    <Compile Include="UIHooks.cs" />
+    <Compile Include="UILabelOverrides.cs" />
+    <Compile Include="UITextHandler.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>"E:\Code\KSPMod\KSP Debugging Tools\vsbuild.bat" $(TargetName) $(TargetDir) $(SolutionName) $(SolutionDir)</PostBuildEvent>
+    <PostBuildEvent>xcopy /y "$(TargetPath)" "E:\Code\KSPMod\Unity PartTools Project\Assets\Plugins\"
+
+"E:\Code\KSPMod\KSP Debugging Tools\vsbuild.bat" $(TargetName) $(TargetDir) $(SolutionName) $(SolutionDir) 1</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

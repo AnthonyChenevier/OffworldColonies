@@ -1,4 +1,4 @@
-﻿using ModUtils;
+﻿using ModUtilities;
 
 namespace PQSModLoader
 {
@@ -14,7 +14,7 @@ namespace PQSModLoader
         }
 
         public override void Orientate() {
-            ModLogger.Log($"{name}.Orientate() called");
+            ModLogger.Log($"{name}.Orientate() called. Current transform: P:{transform.position} R:{transform.rotation} S:{transform.localScale}");
             base.Orientate();
         }
 
@@ -66,6 +66,16 @@ namespace PQSModLoader
         public override void OnUpdateFinished() {
             //OCLogger.Log($"{name}.OnUpdateFinished() called"); //many logspam. much annoy. wow.
             base.OnUpdateFinished();
+        }
+
+        /// <summary>
+        /// Refreshes the mod
+        /// </summary>
+        public void Refresh() {
+            OnSetup();
+            OnPostSetup();
+            if (sphere.isAlive)
+                OnSphereActive();
         }
     }
 }

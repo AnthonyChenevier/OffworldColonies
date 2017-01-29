@@ -26,8 +26,7 @@
         public string BodyName
         {
             get { return _bodyName; }
-            set
-            {
+            set {
                 _bodyName = value;
                 _body = PSystemManager.Instance.localBodies.Find(p => p.bodyName == value);
             }
@@ -55,14 +54,8 @@
         /// The coordinates in world space
         /// </summary>
         public Vector3d WorldPosition {
-            get
-            {
-                return Body.GetWorldSurfacePosition(Latitude, Longitude, Altitude);
-            }
-            set
-            {
-                Body.GetLatLonAlt(value, out _latitude, out _longitude, out _altitude);
-            }
+            get { return Body.GetWorldSurfacePosition(Latitude, Longitude, Altitude); }
+            set { Body.GetLatLonAlt(value, out _latitude, out _longitude, out _altitude); }
         }
 
         ///<summary>
@@ -94,11 +87,19 @@
             Body = body;
             Vector3d worldPosition = body.position + radialPosition * (body.Radius + altitude);
             WorldPosition = worldPosition;
+        }
 
-            //Latitude = Body.GetLatitude(radialPosition, true);
-            //Longitude = Body.GetLongitude(radialPosition, true);
-            //Altitude = altitude;
+        public BodySurfacePosition(ConfigNode node) {
+            Load(node);
+        }
 
+        public BodySurfacePosition(BodySurfacePosition bodyCoordinates) {
+            Body = bodyCoordinates.Body;
+            WorldPosition = bodyCoordinates.WorldPosition;
+        }
+
+        public void Save(ConfigNode node) {
+            //nothing
         }
 
         public void Load(ConfigNode node) {
@@ -107,9 +108,15 @@
             WorldPosition = tmp.WorldPosition;
         }
 
-        public void Save(ConfigNode node)
-        {
-            //nothing
+        public ConfigNode ToNode() {
+            ConfigNode toNode = new ConfigNode();
+
+            toNode.AddValue("BodyName", BodyName);
+            toNode.AddValue("Latitude", Latitude);
+            toNode.AddValue("Longitude", Longitude);
+            toNode.AddValue("Altitude", Altitude);
+
+            return toNode;
         }
     }
 }
