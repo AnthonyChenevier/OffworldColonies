@@ -1,6 +1,5 @@
-﻿using ModUtilities;
-using OffworldColonies.UI;
-using UnityEngine;
+﻿using OffworldColonies.UI;
+using OffworldColonies.Utilities;
 
 namespace OffworldColonies.ColonyManagement {
     /// <summary>
@@ -12,8 +11,6 @@ namespace OffworldColonies.ColonyManagement {
     [KSPScenario(ScenarioCreationOptions.AddToAllGames, GameScenes.SPACECENTER, GameScenes.FLIGHT,
          GameScenes.TRACKSTATION)]
     public class OffworldColoniesScenario : ScenarioModule {
-        private static ColonyManager CM => ColonyManager.Instance;
-
         /// <summary>Singleton Instance</summary>
         public static OffworldColoniesScenario Instance { get; private set; }
 
@@ -46,8 +43,8 @@ namespace OffworldColonies.ColonyManagement {
                     gameObject.AddComponent<ColonyManager>();
                     break;
                 case GameScenes.FLIGHT:
-                    ModLogger.Log("Adding BuildUI and Colony Managers");
-                    gameObject.AddComponent<BuildUIManager>();
+                    ModLogger.Log("Adding FlightUIController and Colony Managers");
+                    gameObject.AddComponent<FlightUIController>();
                     gameObject.AddComponent<ColonyManager>();
                     break;
                 default:
@@ -62,8 +59,8 @@ namespace OffworldColonies.ColonyManagement {
         public void OnDestroy() {
             ModLogger.Log($"OffworldColoniesScenario: OnDestroy in {HighLogic.LoadedScene}");
             //Destroy BuildUI and Colony Managers
-            if (CM != null) Destroy(CM);
-            if (BuildUIManager.Instance != null) Destroy(BuildUIManager.Instance);
+            if (ColonyManager.Instance != null) Destroy(ColonyManager.Instance);
+            if (FlightUIController.Instance != null) Destroy(FlightUIController.Instance);
             //Clean up instance
             if (Instance != null && Instance == this) Instance = null;
         }
@@ -72,9 +69,8 @@ namespace OffworldColonies.ColonyManagement {
         public override void OnLoad(ConfigNode gameNode) {
             base.OnLoad(gameNode);
 
-            if (CM == null) return;
-
-            CM.Load(gameNode);
+            if (ColonyManager.Instance != null)
+                ColonyManager.Instance.Load(gameNode.GetNode("OFFWORLD_COLONIES"));
 
             ModLogger.Log("ColonyManager ScenarioModule loaded");
         }
@@ -83,9 +79,11 @@ namespace OffworldColonies.ColonyManagement {
         public override void OnSave(ConfigNode gameNode) {
             base.OnSave(gameNode);
 
-            if (CM == null) return;
-            //Save ColonyManager data to the node
-            CM.Save(gameNode);
+            //get the scenario node's data if it exists or create a new node if not
+            if (ColonyManager.Instance != null)
+                ColonyManager.Instance.Save(gameNode.GetNode("OFFWORLD_COLONIES") ??
+                                            gameNode.AddNode("OFFWORLD_COLONIES"));
+
             ModLogger.Log("ColonyManager ScenarioModule saved");
         }
     }

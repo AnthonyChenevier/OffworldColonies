@@ -48,24 +48,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Factories\LODFactory.cs" />
-    <Compile Include="Factories\PQSCity2Factory.cs" />
-    <Compile Include="Factories\StaticModelFactory.cs" />
-    <Compile Include="RuntimePQSCity2.cs" />
-    <Compile Include="RuntimePQSLoader.cs" />
-    <Compile Include="RuntimePQSModInjector.cs" />
+    <Compile Include="Factories\LODModelFactory.cs" />
+    <Compile Include="Factories\SingleModelFactory.cs" />
+    <Compile Include="BodyAnchorLoader.cs" />
+    <Compile Include="BodyAnchor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TypeDefinitions\LODDefinition.cs" />
+    <Compile Include="TypeDefinitions\SurfaceStructure.cs" />
+    <Compile Include="TypeDefinitions\LODModelDefinition.cs" />
     <Compile Include="TypeDefinitions\MultiLODModelDefinition.cs" />
-    <Compile Include="TypeDefinitions\PQSCity2Definition.cs" />
-    <Compile Include="TypeDefinitions\StaticModelDefinition.cs" />
+    <Compile Include="TypeDefinitions\SurfaceStructureDefinition.cs" />
+    <Compile Include="TypeDefinitions\SingleModelDefinition.cs" />
     <Compile Include="TypeDefinitions\BodySurfacePosition.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ModUtilities\ModUtilities.csproj">
-      <Project>{e002c51b-41ba-4459-bdf3-35e97586380d}</Project>
-      <Name>ModUtilities</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

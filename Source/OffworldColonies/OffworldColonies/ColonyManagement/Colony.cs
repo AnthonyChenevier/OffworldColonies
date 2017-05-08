@@ -1,32 +1,135 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using ModUtilities;
-using OffworldColonies.Debug;
+using OffworldColonies.HexTiles;
+using OffworldColonies.Utilities;
 using PQSModLoader;
-using PQSModLoader.Factories;
 using PQSModLoader.TypeDefinitions;
 using UnityEngine;
 
 namespace OffworldColonies.ColonyManagement {
     public class Colony : MonoBehaviour {
-        private static ColonyManager CM => ColonyManager.Instance;
 
-        public RuntimePQSCity2 AnchorObject { get; private set; }
-        public List<HexTile> Tiles { get; private set; }
+        public SurfaceStructure SurfaceAnchor { get; private set; }
+
         public HexTileGrid HexGrid { get; private set; }
 
-        private int _colonyID;
-        public int ColonyID => _colonyID;
+        public string ColonyName { get; private set; }
+        public int ColonyID { get; private set; }
+
+        public BodySurfacePosition BodyCoordinates { get; private set; }
+        public Vector3 WorldPosition => BodyCoordinates.WorldPosition;
+        public string BodyName => BodyCoordinates.BodyName;
+        public CelestialBody Body => BodyCoordinates.Body;
+
+        public float AltitudeOffset { get; private set; }
+        public float RotationOffset { get; private set; }
+
+        public List<BuildOrder> BuildOrders { get; } = new List<BuildOrder>();
+
+        private List<HexTile> _tiles;
+
+        private void Awake() {
+            ModLogger.Log($"Initialising {gameObject.name}...");
+            _tiles = new List<HexTile>();
+        }
+
+        private void OnDestroy() {
+            ModLogger.Log($"Destroying {gameObject.name}");
+            if (ColonyManager.Instance.Contains(this))
+                ColonyManager.Instance.Remove(this);
+            //destroy our surface anchor too
+            Destroy(SurfaceAnchor);
+        }
+
+        public void Init(SurfaceStructure colonyCity, string colonyName, int colonyID, BodySurfacePosition bodyCoordinates, float altitudeOffset, float rotationOffset, HexTileGrid hexGrid) {
+            ColonyName = colonyName;
+            ColonyID = colonyID;
+            SurfaceAnchor = colonyCity;
+            BodyCoordinates = bodyCoordinates;
+            AltitudeOffset = altitudeOffset;
+            RotationOffset = rotationOffset;
+            HexGrid = hexGrid;
+        }
+
+        public void Refresh() {
+            SurfaceAnchor.Refresh();
+        }
+
+        public void DestroyHanging() {
+            ModLogger.LogWarning($"{gameObject.name} does not have a corresponding node in persistent.sfs (hanging reference) and will be destroyed.");
+            Destroy(this);
+        }
+
+        /// <summary>
+        ///     Design goal:
+        ///     Add Base Part must be able to build parts over time, using a placement ghost as a
+        ///     placeholder and consuming resources (Ore or CRP) at a given rate. The placeholder
+        ///     will have a collider as soon as building begins. This means that static base parts
+        ///     should be cheap and fast to build compared to active parts (with their own
+        ///     behaviour/functionality) to prevent exploitation of unfinished base parts as a
+        ///     cheap way of making flat landing areas.
+        /// </summary>
+        /// <param name="hexTile"></param>
+        public void AddTile(HexTile hexTile) { _tiles.Add(hexTile); }
+
+        public void Load(ConfigNode node) {
+            //none of this is required for this phase of development
+            //string colonyName = node.GetValue("colonyName");
+            //int colonyID = int.Parse(node.GetValue("colonyID"));
+            //BodySurfacePosition bodyCoordinates = new BodySurfacePosition(node.GetNode("bodyCoordinates"));
+            //float altitudeOffset = float.Parse(node.GetValue("altitudeOffset"));
+            //float rotationOffset = float.Parse(node.GetValue("rotationOffset"));
+
+            //Init(SurfaceAnchor, colonyName, colonyID, bodyCoordinates, altitudeOffset, rotationOffset, HexGrid);
+        }
 
 
-        private string _colonyName;
-        private BodySurfacePosition _bodyCoordinates;
-        private float _altitudeOffset;
-        private float _rotationOffset;
-        private HexTileType _initialHexTile;
+        /// <summary>
+        /// Requires the node be an existing "COLONY" node
+        /// </summary>
+        /// <param name="node"></param>
+        public void Save(ConfigNode node) {
+            node.AddValue("colonyName", ColonyName);
+            node.AddValue("colonyID", ColonyID);
+            node.AddValue("altitudeOffset", AltitudeOffset);
+            node.AddValue("rotationOffset", RotationOffset);
 
+            BodySurfacePosition coordinates = new BodySurfacePosition(BodyCoordinates);
+            coordinates.Altitude -= AltitudeOffset;
+            coordinates.Save(node.GetNode("SURFACE_POSITION") ?? node.AddNode("SURFACE_POSITION"));
+
+            foreach (HexTile hexTile in _tiles)
+                hexTile.Save(node.AddNode("TILE"));
+        }
+
+
+        public bool HasBuildOrder(int orderIndex) {
+            return BuildOrders.Count > orderIndex && BuildOrders[orderIndex] != null;
+        }
+
+        public int StartBuildOrder(BuildOrder buildOrder) {
+            if (!buildOrder.Start())
+                return -1;
+
+            BuildOrders.Add(buildOrder);
+            return BuildOrders.Count - 1;
+        }
+
+        public bool ProcessBuildOrder(int orderIndex) {
+            return BuildOrders[orderIndex].Process();
+        }
+
+        public void PauseBuildOrder(int orderIndex, bool doPause) {
+            BuildOrders[orderIndex].Pause(doPause);
+        }
+
+        public bool CancelBuildOrder(int orderIndex) {
+            BuildOrders[orderIndex].Cancel();
+            BuildOrders.RemoveAt(orderIndex);
+            return true;
+        }
+
+        #region Factory Methods
         /// <summary>
         /// Creates a new colony.
         /// </summary>
@@ -41,111 +144,47 @@ namespace OffworldColonies.ColonyManagement {
         /// <param name="bodyCoordinates">The body and location to place the colony</param>
         /// <param name="altitudeOffset"></param>
         /// <param name="rotationOffset"></param>
-        /// <param name="initialHexTile">The inital hex base type</param>
         /// <returns>The newly created base controller</returns>
         public static Colony Create(string colonyName,
-            int colonyID,
-            BodySurfacePosition bodyCoordinates,
-            float altitudeOffset,
-            float rotationOffset,
-            HexTileType initialHexTile = HexTileType.Default) {
+                                    int colonyID,
+                                    BodySurfacePosition bodyCoordinates,
+                                    float altitudeOffset,
+                                    float rotationOffset) {
 
             //create the initial PQSCity2. This will be the anchor point for the entire base 
             //from which new base sections can be added (as child models/lodObjects)
             bodyCoordinates.Altitude += altitudeOffset;
             //create the PQSCity2 instance that anchor us to the planet and add the inital base
-            RuntimePQSCity2 colonyCity = PQSCity2Factory.Create(colonyName, bodyCoordinates, rotationOffset);
+            SurfaceStructure colonyAnchor = SurfaceStructure.Create(colonyName, bodyCoordinates, rotationOffset);
             //add it to the runtime pqs injector for this planet so it stays updated
-            RuntimePQSLoader.Instance.ModInjectors[colonyCity.sphere.name].AddMod(colonyCity);
+            BodyAnchorLoader.Instance.Anchors[bodyCoordinates.BodyName].Add(colonyAnchor);
 
             //add and initialise the colony controller component
-            Colony newColony = colonyCity.gameObject.AddComponent<Colony>();
-            newColony._colonyName = colonyName;
-            newColony._bodyCoordinates = bodyCoordinates;
-            newColony._altitudeOffset = altitudeOffset;
-            newColony._rotationOffset = rotationOffset;
-            newColony._initialHexTile = initialHexTile;
-            newColony._colonyID = colonyID;
-            newColony.AnchorObject = colonyCity;
-            newColony.HexGrid = new HexTileGrid(4);
+            Colony newColony = colonyAnchor.gameObject.AddComponent<Colony>();
+            HexTileGrid hexTileGrid = new HexTileGrid(newColony.transform, 2, ColonyManager.Instance.BaseRadius);
+            newColony.Init(colonyAnchor, colonyName, colonyID, bodyCoordinates, altitudeOffset, rotationOffset, hexTileGrid);
 
-            //now add our initial hex base lod models
-            MultiLODModelDefinition modelDefinition = CM.HexDefinitions[initialHexTile].ModelDefinition;
-            Vector3 positionOffset = newColony.HexGrid.Positions[0];
-            MultiLODObject lodObject = PQSCity2Factory.AddMultiLODModelTo(colonyCity, modelDefinition, positionOffset, Vector3.zero, 0);
-            HexTile hexTile = new HexTile(newColony, initialHexTile, lodObject, 0);
-            newColony.Tiles.Add(hexTile);
-            
             return newColony;
         }
 
-        public static Colony Create(ConfigNode colonyNode) {
+        public static Colony LoadNew(ConfigNode colonyNode) {
             string colonyName = colonyNode.GetValue("colonyName");
             int colonyID = int.Parse(colonyNode.GetValue("colonyID"));
-            BodySurfacePosition bodyCoordinates = new BodySurfacePosition(colonyNode.GetNode("bodyCoordinates"));
             float altitudeOffset = float.Parse(colonyNode.GetValue("altitudeOffset"));
             float rotationOffset = float.Parse(colonyNode.GetValue("rotationOffset"));
-            HexTileType initialHexTile = HexTile.ParseType(colonyNode.GetValue("initialHexTile"));
-            Colony newColony = Create(colonyName, colonyID, bodyCoordinates, altitudeOffset, rotationOffset, initialHexTile);
+            BodySurfacePosition bodyCoordinates = new BodySurfacePosition(colonyNode.GetNode("SURFACE_POSITION"));
 
-            ConfigNode[] baseParts = colonyNode.GetNodes("basePart");
-            foreach (ConfigNode node in baseParts)
-                newColony.AddNewHexTile(int.Parse(node.GetValue("hexPosIndex")), HexTile.ParseType(node.GetValue("partType")));
-            
-            return newColony;
-        }
+            Colony newColony = Create(colonyName, colonyID, bodyCoordinates, altitudeOffset, rotationOffset);
 
-        public void Refresh() {
-            AnchorObject.Refresh();
-        }
-
-
-        private void Awake() {
-            ModLogger.Log($"Initialising {gameObject.name}...");
-            Tiles = new List<HexTile>();
-        }
-
-        private void Start() {
-            ModLogger.Log($"{gameObject.name} starting");
-        }
-
-        private void OnDestroy() {
-            ModLogger.Log($"Destroying {gameObject.name}");
-        }
-
-        /// <summary>
-        ///     Design goal:
-        ///     Add Base Part must be able to build parts over time, using a placement ghost as a
-        ///     placeholder and consuming resources (Ore or CRP) at a given rate. The placeholder
-        ///     will have a collider as soon as building begins. This means that static base parts
-        ///     should be cheap and fast to build compared to active parts (with their own
-        ///     behaviour/functionality) to prevent exploitation of unfinished base parts as a
-        ///     cheap way of making flat landing areas.
-        /// </summary>
-        /// <param name="hexPosIndex"></param>
-        /// <param name="partType"></param>
-        public void AddNewHexTile(int hexPosIndex, HexTileType partType) {
-            Tiles.Add(HexTile.Create(this, hexPosIndex, partType));
-        }
-
-        public ConfigNode ToNode() {
-            ConfigNode colonyNode = new ConfigNode("COLONY");
-
-            colonyNode.AddValue("colonyName", _colonyName);
-            colonyNode.AddValue("colonyID", _colonyID);
-            BodySurfacePosition coordinates = new BodySurfacePosition(_bodyCoordinates);
-            coordinates.Altitude -= _altitudeOffset;
-            colonyNode.AddNode("bodyCoordinates", coordinates.ToNode());
-            colonyNode.AddValue("altitudeOffset", _altitudeOffset);
-            colonyNode.AddValue("rotationOffset", _rotationOffset);
-            colonyNode.AddValue("initialHexTile", _initialHexTile.ToString());
-
-            foreach (HexTile hexTile in Tiles) {
-                if (hexTile == Tiles[0]) continue;
-                colonyNode.AddNode("basePart", hexTile.ToNode());
+            //add base parts if they exist
+            ConfigNode[] tileConfigs = colonyNode.GetNodes("TILE");
+            foreach (ConfigNode node in tileConfigs) {
+                HexTile hexTile = HexTile.LoadNew(newColony, node);
+                newColony.AddTile(hexTile);
             }
 
-            return colonyNode;
+            return newColony;
         }
+        #endregion
     }
 }

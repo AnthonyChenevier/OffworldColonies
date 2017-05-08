@@ -1,0 +1,305 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="OffworldColonies.ColonyManagement.Colony" BaseTypeListCollapsed="true">
+    <Position X="16.25" Y="5" Width="1.75" />
+    <InheritanceLine Type="UnityEngine.MonoBehaviour" ManuallyRouted="true">
+      <Path>
+        <Point X="13.5" Y="1.441" />
+        <Point X="13.5" Y="2.836" />
+        <Point X="16.844" Y="2.836" />
+        <Point X="16.844" Y="5" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>CAABgIAAABBBwAIYAAEDEAAAAAAQAUQgAAAGAQAAAEA=</HashCode>
+      <FileName>ColonyManagement\Colony.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="HexGrid" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="BuildOrders" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="OffworldColonies.ColonyManagement.ColonyManager" BaseTypeListCollapsed="true">
+    <Position X="3.25" Y="5" Width="2.25" />
+    <InheritanceLine Type="UnityEngine.MonoBehaviour" ManuallyRouted="true">
+      <Path>
+        <Point X="13.5" Y="1.441" />
+        <Point X="13.5" Y="2.828" />
+        <Point X="4.375" Y="2.828" />
+        <Point X="4.375" Y="5" />
+      </Path>
+    </InheritanceLine>
+    <AssociationLine Name="HexDefinitions" Type="OffworldColonies.HexTiles.HexTileDefinition" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="5.062" Y="14.059" />
+        <Point X="5.062" Y="14.522" />
+        <Point X="5.062" Y="14.522" />
+        <Point X="5.062" Y="14.75" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-1.238" Y="0.096" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AIIhgIEgnAEC0IIgAAADjAAAAAAAFAAgQLCgACAQQEA=</HashCode>
+      <FileName>ColonyManagement\ColonyManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Instance" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="HexDefinitions" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="OffworldColonies.ColonyManagement.OffworldColoniesScenario">
+    <Position X="1" Y="5" Width="1.5" />
+    <AssociationLine Name="Instance" Type="OffworldColonies.ColonyManagement.OffworldColoniesScenario" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="1.438" Y="6.81" />
+        <Point X="1.438" Y="7.06" />
+        <Point X="2.062" Y="7.06" />
+        <Point X="2.062" Y="6.81" />
+      </Path>
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.058" Y="0.3" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>EAABAAAAQAAAAAAAAAAAAAACAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>ColonyManagement\OffworldColoniesScenario.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Instance" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="OffworldColonies.HexTiles.HexTile" BaseTypeListCollapsed="true">
+    <Position X="19" Y="5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AQAAgIIIECAAEAAQBAAAAAAAAAAgAEQAABAGUQAAAAA=</HashCode>
+      <FileName>HexTiles\HexTile.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Colony" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="OffworldColonies.HexTiles.HexTileDefinition" BaseTypeListCollapsed="true">
+    <Position X="3.25" Y="14.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgIBIAAAAgIAEAAAIAAQAAAAABAAAAAAAQAAAAAA=</HashCode>
+      <FileName>HexTiles\HexTileDefinition.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Recipe" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="OffworldColonies.HexTiles.HexTileGrid">
+    <Position X="19.25" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAIAACABAgAAAAAAAAABAAAAQAAAAABAAAAAAAA=</HashCode>
+      <FileName>HexTiles\HexTileGrid.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OffworldColonies.HexTiles.HexTileRecipe">
+    <Position X="2.75" Y="18.75" Width="1.5" />
+    <AssociationLine Name="Resources" Type="OffworldColonies.HexTiles.RecipeResource" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="3.5" Y="20.497" />
+        <Point X="3.5" Y="21.188" />
+        <Point X="4.75" Y="21.188" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAIAAAAAAEAAAAAAIAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>HexTiles\HexTileRecipe.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Resources" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="OffworldColonies.Part.ColonyLinkModule">
+    <Position X="9.75" Y="5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABAAAAAAAAIEAAAAAABAQAAIEQAAAAAAAEAAAA=</HashCode>
+      <FileName>Part\ColonyLinkModule.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="CurrentColony" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="OffworldColonies.Part.HextilePrinterModule" BaseTypeListCollapsed="true">
+    <Position X="6.25" Y="5" Width="2.25" />
+    <AssociationLine Name="_placementPlaceholder" Type="OffworldColonies.UI.PlacementPlaceholder" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="7.812" Y="13.674" />
+        <Point X="7.812" Y="15.53" />
+        <Point X="14.375" Y="15.53" />
+        <Point X="14.375" Y="15.155" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>wEAFAAEAAgAEQCCAEAAECiAeEACIAMQAIGAqAAVRARQ=</HashCode>
+      <FileName>Part\HextilePrinterModule.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_placementPlaceholder" />
+      <Property Name="LinkModule" />
+      <Property Name="SelectedTile" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="OffworldColonies.UI.BuildPlaceholder">
+    <Position X="11.75" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAACAAAAAAAAEAAAAAEAAAAAAA=</HashCode>
+      <FileName>UI\BuildPlaceholder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OffworldColonies.UI.FlightUIController">
+    <Position X="23.5" Y="8.5" Width="2" />
+    <NestedTypes>
+      <Enum Name="OffworldColonies.UI.FlightUIController.UIMode" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>UI\FlightUIController.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>MBgBgAAACAAAAEEAAAABKAQAoQEAACAAYAgkCCBYhEQ=</HashCode>
+      <FileName>UI\FlightUIController.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Instance" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="OffworldColonies.UI.InputHandler">
+    <Position X="14.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIBAAAAAEAAAAEAABAAAAAAAAAAAIAUAAAgAABAAAA=</HashCode>
+      <FileName>UI\InputHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OffworldColonies.UI.PlacementPlaceholder">
+    <Position X="13.5" Y="9.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>IAQAAAQAGAAAAQAAEEACSEABAAAAAEQCBEAAEAAAAAA=</HashCode>
+      <FileName>UI\PlacementPlaceholder.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_printerPart" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="OffworldColonies.UI.TilePlaceholder">
+    <Position X="12.5" Y="5" Width="1.75" />
+    <InheritanceLine Type="UnityEngine.MonoBehaviour" ManuallyRouted="true">
+      <Path>
+        <Point X="13.5" Y="1.441" />
+        <Point X="13.5" Y="2.798" />
+        <Point X="13.375" Y="2.798" />
+        <Point X="13.375" Y="5" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAABEAAAAACAAAAAAAEACEACAAAAAEQAAAAgAIAAQAA=</HashCode>
+      <FileName>UI\TilePlaceholder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OffworldColonies.UIBridgeKSP.TextMeshProKSPUI" BaseTypeListCollapsed="true">
+    <Position X="25.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAgAAAAAAAAgAAIAAAAAAAAAAAAAAAAAACA=</HashCode>
+      <FileName>UIBridgeKSP\TextMeshProKSPUI.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.218" />
+  </Class>
+  <Class Name="OffworldColonies.UIBridgeKSP.KSPUIFactory">
+    <Position X="27.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAEEAgAACAAAAAAAAAAABgAEAGAAAAABAAAAA=</HashCode>
+      <FileName>UIBridgeKSP\KSPUIFactory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OffworldColonies.UIBridgeKSP.UIHooksKSP">
+    <Position X="23.5" Y="5" Width="2" />
+    <InheritanceLine Type="UnityEngine.MonoBehaviour" ManuallyRouted="true">
+      <Path>
+        <Point X="13.5" Y="1.441" />
+        <Point X="13.5" Y="2.846" />
+        <Point X="24.5" Y="2.846" />
+        <Point X="24.5" Y="5" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABBAAAgAAAAAAAAAQACBAAAAACAIAAAAI=</HashCode>
+      <FileName>UIBridgeKSP\UIHooksKSP.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ScenarioModule" Collapsed="true">
+    <Position X="1" Y="3.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="PartModule" Collapsed="true">
+    <Position X="8.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="UnityEngine.MonoBehaviour" Collapsed="true">
+    <Position X="12.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Class Name="TMPro.TextMeshProUGUI" Collapsed="true">
+    <Position X="25.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="OffworldColonies.ColonyManagement.BuildOrder">
+    <Position X="21.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAQCAAAQBAJnABAgAABAIACAIAAAAmAQAEICA=</HashCode>
+      <FileName>ColonyManagement\BuildOrder.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="OffworldColonies.HexTiles.RecipeResource">
+    <Position X="4.75" Y="18.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAIAAgAAEAAAQAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>HexTiles\HexTileRecipe.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Interface Name="OffworldColonies.Part.IColonyLinked" Collapsed="true">
+    <Position X="11.5" Y="3.75" Width="1.5" />
+    <AssociationLine Name="LinkModule" Type="OffworldColonies.Part.ColonyLinkModule">
+      <MemberNameLabel ManuallyPlaced="true">
+        <Position X="-0.869" Y="0.623" />
+      </MemberNameLabel>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Part\ColonyLinkModule.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="LinkModule" />
+    </ShowAsAssociation>
+  </Interface>
+  <Interface Name="OffworldColonies.Part.ISharedResourceProvider" Collapsed="true">
+    <Position X="15.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Part\IResourceProvider.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="UIBridge.IUITextListener" Collapsed="true">
+    <Position X="29.25" Y="5" Width="1.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Enum Name="OffworldColonies.HexTiles.HexTileType" Collapsed="true">
+    <Position X="17" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAEAAIAAAIAAIAAgAAAAhAAAgAAAAIAQ=</HashCode>
+      <FileName>HexTiles\HexTileType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

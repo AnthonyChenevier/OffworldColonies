@@ -37,6 +37,9 @@
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>..\..\..\..\..\KSP Installs\KSP_Test\KSP_x64_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
+    <Reference Include="DebugStuff">
+      <HintPath>..\..\..\..\..\KSP Installs\KSP_Test\GameData\DebugStuff\DebugStuff.dll</HintPath>
+    </Reference>
     <Reference Include="KSPAssets, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\KSP Installs\KSP_Test\KSP_x64_Data\Managed\KSPAssets.dll</HintPath>
@@ -53,23 +56,34 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ColonyManagement\ColonyManager.cs" />
-    <Compile Include="UI\BuildUIManager.cs" />
-    <Compile Include="Debug\DebugTools.cs" />
+    <Compile Include="ColonyManagement\BuildOrder.cs" />
+    <Compile Include="HexGrid\HexCell.cs" />
+    <Compile Include="HexGrid\HexCoordinates.cs" />
+    <Compile Include="HexGrid\HexDirection.cs" />
+    <Compile Include="HexGrid\HexGrid.cs" />
+    <Compile Include="Utilities\ModLogger.cs" />
+    <Compile Include="Part\ISharedResourceProvider.cs" />
+    <Compile Include="HexTiles\HexTileRecipe.cs" />
+    <Compile Include="HexTiles\HexTileType.cs" />
+    <Compile Include="HexTiles\HexTileDefinition.cs" />
+    <Compile Include="Part\ColonyLinkModule.cs" />
+    <Compile Include="Part\HextilePrinterModule.cs" />
+    <Compile Include="Utilities\TypeUtilities.cs" />
+    <Compile Include="UI\InputHandler.cs" />
+    <Compile Include="UI\BuildPlaceholder.cs" />
+    <Compile Include="UI\PlacementPlaceholder.cs" />
+    <Compile Include="UI\FlightUIController.cs" />
     <Compile Include="ColonyManagement\OffworldColoniesScenario.cs" />
-    <Compile Include="UI\GhostController.cs" />
-    <Compile Include="Part\BaseBuilderPart.cs" />
-    <Compile Include="ColonyManagement\HexTile.cs" />
-    <Compile Include="ColonyManagement\HexTileGrid.cs" />
+    <Compile Include="UI\TilePlaceholder.cs" />
+    <Compile Include="HexTiles\HexTile.cs" />
+    <Compile Include="HexTiles\HexTileGrid.cs" />
     <Compile Include="ColonyManagement\Colony.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UI\TextMeshReplacer.cs" />
-    <Compile Include="UI\UIFactory.cs" />
+    <Compile Include="UIBridgeKSP\TextMeshProKSPUI.cs" />
+    <Compile Include="UIBridgeKSP\KSPUIFactory.cs" />
+    <Compile Include="UIBridgeKSP\UIHooksKSP.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ModUtilities\ModUtilities.csproj">
-      <Project>{e002c51b-41ba-4459-bdf3-35e97586380d}</Project>
-      <Name>ModUtilities</Name>
-    </ProjectReference>
     <ProjectReference Include="..\PQSModLoader\PQSModLoader.csproj">
       <Project>{032170aa-5114-437c-a94f-7559bab88e2f}</Project>
       <Name>PQSModLoader</Name>
@@ -78,6 +92,10 @@
       <Project>{a927ebbb-6a0c-4ae3-b316-24c20088ab9d}</Project>
       <Name>UIBridge</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagramCollapsed.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

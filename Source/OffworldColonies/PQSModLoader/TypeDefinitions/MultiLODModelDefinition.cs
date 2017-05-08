@@ -9,18 +9,14 @@ namespace PQSModLoader.TypeDefinitions
     /// </summary>
     public class MultiLODModelDefinition
     {
-        public List<LODDefinition> LODDefines { get; private set; }
-
-        public MultiLODModelDefinition(ConfigNode node) {
-            Load(node);
-        }
+        public List<LODModelDefinition> LODDefines { get; private set; }
 
         public void Load(ConfigNode node)
         {
-            LODDefines = new List<LODDefinition>();
+            LODDefines = new List<LODModelDefinition>();
             ConfigNode[] lodNodes = node.GetNodes("LOD");
             foreach (ConfigNode lodNode in lodNodes)
-                LODDefines.Add(new LODDefinition(lodNode));
+                LODDefines.Add(new LODModelDefinition(lodNode));
 
             LODDefines.Sort((p, q) => p.VisibleRange.CompareTo(q.VisibleRange));
         }

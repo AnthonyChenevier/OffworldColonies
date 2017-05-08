@@ -5,3 +5,4 @@ E:\Code\KSPMod\Repositories\OffworldColonies\Source\OffworldColonies\UIBridge\bi
 E:\Code\KSPMod\Repositories\OffworldColonies\Source\OffworldColonies\UIBridge\bin\Debug\UnityEngine.xml
 E:\Code\KSPMod\Repositories\OffworldColonies\Source\OffworldColonies\UIBridge\obj\Debug\UIBridge.dll
 E:\Code\KSPMod\Repositories\OffworldColonies\Source\OffworldColonies\UIBridge\obj\Debug\UIBridge.pdb
+E:\Code\KSPMod\Repositories\OffworldColonies\Source\OffworldColonies\UIBridge\obj\Debug\UIBridge.csprojResolveAssemblyReference.cache

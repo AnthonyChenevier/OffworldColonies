@@ -99,24 +99,16 @@
         }
 
         public void Save(ConfigNode node) {
-            //nothing
+            node.AddValue("BodyName", BodyName);
+            node.AddValue("Latitude", Latitude);
+            node.AddValue("Longitude", Longitude);
+            node.AddValue("Altitude", Altitude);
         }
 
         public void Load(ConfigNode node) {
             BodySurfacePosition tmp = ResourceUtilities.LoadNodeProperties<BodySurfacePosition>(node);
             Body = tmp.Body;
             WorldPosition = tmp.WorldPosition;
-        }
-
-        public ConfigNode ToNode() {
-            ConfigNode toNode = new ConfigNode();
-
-            toNode.AddValue("BodyName", BodyName);
-            toNode.AddValue("Latitude", Latitude);
-            toNode.AddValue("Longitude", Longitude);
-            toNode.AddValue("Altitude", Altitude);
-
-            return toNode;
         }
     }
 }
