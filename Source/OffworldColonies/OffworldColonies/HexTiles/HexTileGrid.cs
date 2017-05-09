@@ -47,9 +47,8 @@ namespace OffworldColonies.HexTiles {
             position.y = 0f;
             position.z = oz * (outerRadius * 1.5f);
 
-            HexCell cell = _cells[cellIndex] = Object.Instantiate(CellPrefab);
+            HexCell cell = _cells[cellIndex] = new GameObject("HX_" + cellIndex).AddComponent<HexCell>();
 
-            cell.name = "HX_" + cellIndex;
             cell.transform.SetParent(_parent, false);
             cell.transform.localPosition = position;
             cell.coordinates = HexCoordinates.FromOffsetCoordinates(ox + _xStart, oz + _zStart);
